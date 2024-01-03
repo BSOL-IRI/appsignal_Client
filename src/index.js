@@ -5,12 +5,26 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { ErrorBoundary } from "@appsignal/react";
+import appsignal from "./appsignal.js"
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const FallbackComponent = () => (
+  <div>An error was thrown</div>
+);
+
+const WrappedApp = () => (
+  <ErrorBoundary
+    instance={appsignal}
+    fallback={(error) => <FallbackComponent />}
+  >
+    <App />
+  </ErrorBoundary>
+);
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <WrappedApp />
     </BrowserRouter>
   </React.StrictMode>
 );
